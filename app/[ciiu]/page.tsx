@@ -1,6 +1,6 @@
 import { ciiuService } from "@/app/ciiu/service";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { Grid, Callout, Container, Heading, Text } from "@radix-ui/themes";
+import { Callout, Container, Grid, Heading } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 
 export default async function Page({
