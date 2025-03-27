@@ -25,8 +25,8 @@ export default function RootLayout({
   return (
     <html lang="es-CO">
       <body>
-        <Theme accentColor="green">
-          <Box className="bg-[var(--green-4)]">
+        <Theme accentColor="green" radius="small">
+          <Box className="bg-[var(--green-2)]">
             <header>
               <Container size="1" py="4" mx={{ initial: "2", sm: "0" }}>
                 <Flex gap="2" justify="center">

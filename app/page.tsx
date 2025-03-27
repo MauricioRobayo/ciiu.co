@@ -12,7 +12,7 @@ export default async function Page() {
   const sections = await ciiuService.getSections();
   return (
     <Container size="2">
-      <Section>
+      <Section size="2">
         <Flex direction="column" gap="4" asChild>
           <ul>
             {sections.map((section) => (
