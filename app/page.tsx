@@ -1,50 +1,70 @@
-import { ciiuService } from "@/app/ciiu/service";
+import { ciiuService, type CiiuData } from "@/app/ciiu/service";
 import {
+  Box,
   Card,
   Code,
   Container,
   Flex,
   Heading,
   Section,
+  Text,
 } from "@radix-ui/themes";
 
 export default async function Page() {
-  const sections = await ciiuService.getSections();
+  const ciiuTree = await ciiuService.getTree();
   return (
-    <Container size="2">
+    <Container>
       <Section size="2">
-        <Flex direction="column" gap="4" asChild>
-          <ul>
-            {sections.map((section) => (
-              <li key={section.section}>
-                <Card>
-                  <Flex direction="column" gap="2">
-                    <Flex
-                      asChild
-                      direction={{ initial: "column", sm: "row" }}
-                      gap="2"
-                      align={{ initial: "start", sm: "center" }}
-                    >
-                      <header>
-                        <Code variant="solid" size="2">
-                          Sección {section.section}
-                        </Code>
-                        <Heading
-                          as="h2"
-                          size={{ initial: "3", sm: "4" }}
-                          weight="regular"
-                        >
-                          {section.name}
-                        </Heading>
-                      </header>
-                    </Flex>
-                  </Flex>
-                </Card>
-              </li>
-            ))}
-          </ul>
-        </Flex>
+        <Tree tree={ciiuTree} />
       </Section>
     </Container>
+  );
+}
+
+const LevelMap: Record<number, string> = {
+  1: "Divisiones",
+  2: "Grupos",
+  3: "Clases",
+};
+
+function Tree({ tree, level = 1 }: { tree: CiiuData[]; level?: number }) {
+  return (
+    <Flex direction="column" gap="4" asChild>
+      <ul>
+        {tree.map((section) => (
+          <li key={section.code}>
+            <Card variant="surface">
+              <Flex gap="2" direction="column">
+                <Flex direction="row" align="center" gap="2">
+                  <Code variant="solid">{section.code}</Code>
+                  <Heading
+                    as="h2"
+                    size={{ initial: "1", sm: "2" }}
+                    weight="regular"
+                    className="line-clamp-1"
+                  >
+                    {section.description}
+                  </Heading>
+                </Flex>
+                <Box>
+                  {section.children?.length ? (
+                    <details>
+                      <summary>
+                        <Text size="2" color="gray">
+                          {LevelMap[level]}: {section.children.length}
+                        </Text>
+                      </summary>
+                      <Box>
+                        <Tree tree={section.children} level={level + 1} />
+                      </Box>
+                    </details>
+                  ) : null}
+                </Box>
+              </Flex>
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </Flex>
   );
 }

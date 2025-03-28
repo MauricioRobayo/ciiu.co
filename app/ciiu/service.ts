@@ -3,9 +3,23 @@ import { govApi, type GovItem } from "@/app/ciiu/govApi";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 
-const cacheDir = path.join(process.cwd(), "app", "ciiu", "cache");
+export interface CiiuData {
+  description: string;
+  code: string;
+  children?: CiiuData[];
+}
+
+const serviceDir = path.join(process.cwd(), "app", "ciiu");
+const cacheDir = path.join(serviceDir, "cache");
 
 export const ciiuService = {
+  async getTree(): Promise<CiiuData[]> {
+    const rawData = await readFile(
+      path.join(serviceDir, "ciiuTree.json"),
+      "utf-8"
+    );
+    return JSON.parse(rawData);
+  },
   getSections() {
     return withCache({
       name: "section",
