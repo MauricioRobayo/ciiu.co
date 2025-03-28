@@ -8,7 +8,9 @@ import {
   Heading,
   Section,
   Text,
+  Link,
 } from "@radix-ui/themes";
+import NextLink from "next/link";
 
 export default async function Page() {
   const ciiuTree = await ciiuService.getTree();
@@ -43,7 +45,15 @@ function Tree({ tree, level = 1 }: { tree: CiiuData[]; level?: number }) {
                     weight="regular"
                     className="line-clamp-1"
                   >
-                    {section.description}
+                    {level > 3 ? (
+                      <Link asChild>
+                        <NextLink href={`./${section.code}`} prefetch={false}>
+                          {section.description}
+                        </NextLink>
+                      </Link>
+                    ) : (
+                      section.description
+                    )}
                   </Heading>
                 </Flex>
                 <Box>
