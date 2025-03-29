@@ -6,9 +6,9 @@ import {
   Container,
   Flex,
   Heading,
+  Link,
   Section,
   Text,
-  Link,
 } from "@radix-ui/themes";
 import NextLink from "next/link";
 
@@ -31,11 +31,11 @@ const LevelMap: Record<number, string> = {
 
 function Tree({ tree, level = 1 }: { tree: CiiuData[]; level?: number }) {
   return (
-    <Flex direction="column" gap="4" asChild>
-      <ul>
+    <Flex direction="column" asChild>
+      <ul className={level > 3 ? "" : "divide-[var(--gray-6)] divide-y"}>
         {tree.map((section) => (
           <li key={section.code}>
-            <Card variant="surface">
+            <Card variant="ghost" mx="4" my={level > 3 ? "0" : "2"}>
               <Flex gap="2" direction="column">
                 <Flex direction="row" align="center" gap="2">
                   <Code variant="solid">{section.code}</Code>
@@ -56,20 +56,18 @@ function Tree({ tree, level = 1 }: { tree: CiiuData[]; level?: number }) {
                     )}
                   </Heading>
                 </Flex>
-                <Box>
-                  {section.children?.length ? (
-                    <details>
-                      <summary>
-                        <Text size="2" color="gray">
-                          {LevelMap[level]}: {section.children.length}
-                        </Text>
-                      </summary>
-                      <Box>
-                        <Tree tree={section.children} level={level + 1} />
-                      </Box>
-                    </details>
-                  ) : null}
-                </Box>
+                {section.children?.length ? (
+                  <details className="open:font-bold">
+                    <summary>
+                      <Text size="2" color="gray">
+                        {LevelMap[level]}: {section.children.length}
+                      </Text>
+                    </summary>
+                    <Box my="2">
+                      <Tree tree={section.children} level={level + 1} />
+                    </Box>
+                  </details>
+                ) : null}
               </Flex>
             </Card>
           </li>
