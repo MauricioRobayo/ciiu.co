@@ -10,6 +10,7 @@ import {
 import type { Metadata } from "next";
 import { useId } from "react";
 import "./globals.css";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Consulta Código CIIU",
@@ -31,7 +32,9 @@ export default function RootLayout({
               <Container size="1" py="4" mx={{ initial: "2", sm: "0" }}>
                 <Flex gap="2" justify="center">
                   <Heading color="green">
-                    <label htmlFor={id}>CIIU</label>
+                    <Link href="/">
+                      <label htmlFor={id}>CIIU</label>
+                    </Link>
                   </Heading>
                   <TextField.Root
                     placeholder="Buscar código CIIU"
