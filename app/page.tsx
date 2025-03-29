@@ -65,7 +65,7 @@ function Tree({ tree, level = 1 }: { tree: CiiuData[]; level?: number }) {
   return (
     <ul className={level > 3 ? "" : "divide-[var(--gray-6)] divide-y"}>
       {tree.map((section) => (
-        <li key={section.code}>
+        <li key={`${section.code}-${section.description}`}>
           {section.children?.length ? (
             <Flex mx="2" my="2" direction="column" asChild>
               <details className={twJoin("cursor-pointer", levelData.cn.group)}>
