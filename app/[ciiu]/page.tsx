@@ -1,6 +1,17 @@
 import { ciiuService } from "@/app/ciiu/service";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { Callout, Container, Grid, Heading } from "@radix-ui/themes";
+import {
+  Box,
+  Callout,
+  Code,
+  Container,
+  DataList,
+  Flex,
+  Grid,
+  Heading,
+  Section,
+  Separator,
+} from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 
 export default async function Page({
@@ -20,29 +31,60 @@ export default async function Page({
   ]);
   return (
     <Container>
-      <header>
-        <Heading>Código CIIU {data.class}</Heading>
-        <Heading as="h2" size="4">
-          {data.name}
-        </Heading>
-      </header>
+      <Section>
+        <header>
+          <Heading>
+            <Flex direction="row" gap="2" align="center">
+              <Code variant="solid">{data.class}</Code>
+              {data.name}
+            </Flex>
+          </Heading>
+        </header>
+        <Separator size="4" my="4" />
+        <DataList.Root>
+          <DataList.Item>
+            <DataList.Label>Clase</DataList.Label>
+            <DataList.Value>
+              <Code>{data.class}</Code>
+            </DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label>Actividad Económica</DataList.Label>
+            <DataList.Value>{data.name}</DataList.Value>
+          </DataList.Item>
+          <DataList.Item>
+            <DataList.Label>Palabras Clave</DataList.Label>
+            <DataList.Value>{data.keyWords.join(", ")}</DataList.Value>
+          </DataList.Item>
+        </DataList.Root>
+      </Section>
       <main>
         <Grid columns={{ initial: "1", sm: "2" }} gap="4">
-          <Callout.Root color="green">
-            <Callout.Icon>
-              <CheckCircledIcon />
-            </Callout.Icon>
-            <Callout.Text>{data.includes}</Callout.Text>
-          </Callout.Root>
-          <Callout.Root color="red">
-            <Callout.Icon>
-              <CrossCircledIcon />
-            </Callout.Icon>
-            <Callout.Text>{data.excludes}</Callout.Text>
-          </Callout.Root>
+          <Box>
+            <Heading as="h2" size="4" mb="2" color="green">
+              <Flex align="center" gap="2">
+                <CheckCircledIcon />
+                Incluye
+              </Flex>
+            </Heading>
+            <Callout.Root color="green">
+              <Callout.Text>{data.includes}</Callout.Text>
+            </Callout.Root>
+          </Box>
+          <Box>
+            <Heading as="h2" size="4" mb="2" color="red">
+              <Flex align="center" gap="2">
+                <CrossCircledIcon />
+                No incluye
+              </Flex>
+            </Heading>
+            <Callout.Root color="red">
+              <Callout.Text>{data.excludes}</Callout.Text>
+            </Callout.Root>
+          </Box>
         </Grid>
         {section && (
-          <Section
+          <PageSection
             title={`Sección ${section.section}`}
             description={section.name}
             includes={section.includes}
@@ -50,7 +92,7 @@ export default async function Page({
           />
         )}
         {division && (
-          <Section
+          <PageSection
             title={`División ${division.division}`}
             description={division.name}
             includes={division.includes}
@@ -58,7 +100,7 @@ export default async function Page({
           />
         )}
         {group && (
-          <Section
+          <PageSection
             title={`Grupo ${group.group}`}
             description={group.name}
             includes={group.includes}
@@ -70,7 +112,7 @@ export default async function Page({
   );
 }
 
-function Section({
+function PageSection({
   title,
   description,
   excludes,
